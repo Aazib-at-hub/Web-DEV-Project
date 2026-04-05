@@ -15,12 +15,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 const AdminClasses = () => {
   const { items: classes, loading, create, update, remove } = useCrud(classApi);
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [teachers] = useState<Omit<User, 'token'>[]>(getTeachers());
+  const [teachers, setTeachers] = useState<Omit<User, 'token'>[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', departmentId: '', teacherId: '' });
 
-  useEffect(() => { departmentApi.getAll().then(setDepartments); }, []);
+  useEffect(() => { 
+    departmentApi.getAll().then(setDepartments); 
+    getTeachers().then(setTeachers);
+  }, []);
 
   const openCreate = () => { setEditing(null); setForm({ name: '', departmentId: '', teacherId: '' }); setDialogOpen(true); };
   const openEdit = (cls: any) => { setEditing(cls._id); setForm({ name: cls.name, departmentId: cls.departmentId, teacherId: cls.teacherId }); setDialogOpen(true); };
